@@ -3,6 +3,7 @@ package com.cefet.sgr_backend.entities;
 import jakarta.persistence.*;
 import java.util.Objects;
 
+//Fiz só a classe Morador, mas se precisar de mais alguma coisa coloque ou edite
 @Entity
 @Table(name = "tb_morador")
 public class Morador {
