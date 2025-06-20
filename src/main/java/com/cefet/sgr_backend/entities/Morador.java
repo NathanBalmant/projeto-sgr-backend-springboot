@@ -1,7 +1,19 @@
 package com.cefet.sgr_backend.entities;
 
-import jakarta.persistence.*;
+import java.time.LocalDate;
 import java.util.Objects;
+
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 //Fiz só a classe Morador, mas se precisar de mais alguma coisa coloque ou edite
 @Entity
@@ -16,10 +28,13 @@ public class Morador {
     private String nome;
 
     @Column(name = "cpf", unique = true, nullable = false)
+    @NotBlank(message = "O CPF é obrigatório")
+    @Size(min = 11, max = 11, message = "O CPF deve conter exatamente 11 dígitos")
+    @Pattern(regexp = "\\d{11}", message = "O CPF deve conter apenas números")
     private String cpf;
 
     @Column(name = "data_nascimento")
-    private String dataNascimento;
+    private LocalDate dataNascimento;
 
     @Column(name = "celular")
     private String celular;
@@ -36,10 +51,12 @@ public class Morador {
     @Column(name = "senha")
     private String senha;
 
+    private String foto;
+
     public Morador() {}
 
-    public Morador(Long id, String nome, String cpf, String dataNascimento, String celular,
-                   String email, String contatoFamilia, String login, String senha) {
+    public Morador(Long id, String nome, String cpf, LocalDate dataNascimento, String celular,
+                   String email, String contatoFamilia, String login, String senha, String foto) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
@@ -49,6 +66,7 @@ public class Morador {
         this.contatoFamilia = contatoFamilia;
         this.login = login;
         this.senha = senha;
+        this.foto = foto;
     }
 
     public Long getId() {
@@ -71,11 +89,11 @@ public class Morador {
         this.cpf = cpf;
     }
 
-    public String getDataNascimento() {
+    public LocalDate getDataNascimento() {
         return dataNascimento;
     }
 
-    public void setDataNascimento(String dataNascimento) {
+    public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 
@@ -117,6 +135,14 @@ public class Morador {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
     }
 
     @Override
