@@ -17,12 +17,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            .headers(headers -> headers.frameOptions().disable()) // necessário para o H2
+            .headers(headers -> headers.frameOptions().disable()) 
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll() // 🔥 Libera todas as requisições
+                .anyRequest().permitAll() 
             )
-            .formLogin(Customizer.withDefaults()) // 🔸 Pode remover essa linha se não quiser nem a tela de login
-            .httpBasic(Customizer.withDefaults()); // 🔸 Pode remover essa também se não quiser basic auth
+            .formLogin(Customizer.withDefaults()) 
+            .httpBasic(Customizer.withDefaults()); 
 
         return http.build();
     }
