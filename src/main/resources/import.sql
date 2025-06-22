@@ -2,4 +2,4 @@ INSERT INTO tb_morador (nome, cpf, data_nascimento, celular, email, contato_fami
 
 INSERT INTO tb_morador (nome, cpf, data_nascimento, celular, email, contato_familia, login, senha, foto) VALUES ('Ana', '98765432100', '2000-08-14', '31988887777', 'ana@gmail.com', 'Pai: 31977778888', 'ana', '$2a$10$7SFDNZaJkpjvhC1BVazx3e9vkSL7K1Fsn33J8oZn5bwx6m1FjnFpC', '*');
 
-INSERT INTO tb_morador (nome, cpf, data_nascimento, celular, email, contato_familia, login, senha, foto) VALUES ('João', '11122233344', '1999-09-16', '31987654321', 'joao@gmail.com', 'Tia: 31966665555', 'joao', '$2a$10$UPRNljPXKD0BKFa/gJLHXeoI13BuJYi4pn00ClrTjzZAUag1fjoZC', '^');
+INSERT INTO tb_morador (nome, cpf, data_nascimento, celular, email, contato_familia, login, senha, foto) VALUES ('João', '11122233344', '1999-09-16', '31987654321', 'joao@gmail.com', 'Tia: 31966665555', 'joao', '$2a$10$UPRNljPXKD0BKFa/gJLHXeoI13BuJYi4pn00ClrTjzZAUag1fjoZC', '^\');
