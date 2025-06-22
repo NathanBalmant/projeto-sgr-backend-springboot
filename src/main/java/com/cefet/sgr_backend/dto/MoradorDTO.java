@@ -1,7 +1,6 @@
 package com.cefet.sgr_backend.dto;
 
 import com.cefet.sgr_backend.entities.Morador;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class MoradorDTO {
 
@@ -14,9 +13,7 @@ public class MoradorDTO {
     private String contatoFamilia;
     private String login;
     private String senha;
-
-    
-    
+  
 
     private String foto;
 
