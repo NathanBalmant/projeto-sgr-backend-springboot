@@ -22,35 +22,31 @@ public class MoradorController {
     @Autowired
     private MoradorService moradorService;
 
-    // Buscar todos os moradores
     @GetMapping
     public ResponseEntity<List<MoradorDTO>> findAll() {
         List<MoradorDTO> lista = moradorService.findAll();
         return ResponseEntity.ok(lista);
     }
 
-    // Buscar morador por ID
     @GetMapping("/{id}")
     public ResponseEntity<MoradorDTO> findById(@PathVariable Long id) {
         MoradorDTO dto = moradorService.findById(id);
         return ResponseEntity.ok(dto);
     }
 
-    // Inserir novo morador
     @PostMapping
     public ResponseEntity<MoradorDTO> insert(@RequestBody MoradorDTO moradorDTO) {
         MoradorDTO dto = moradorService.insert(moradorDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
-    // Atualizar morador
+
     @PutMapping("/{id}")
     public ResponseEntity<MoradorDTO> update(@PathVariable Long id, @RequestBody MoradorDTO moradorDTO) {
         MoradorDTO dto = moradorService.update(id, moradorDTO);
         return ResponseEntity.ok(dto);
     }
 
-    // Deletar morador
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         moradorService.delete(id);
