@@ -3,6 +3,8 @@ package com.cefet.sgr_backend.entities;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import com.cefet.sgr_backend.enums.SituacaoConta;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -27,8 +29,8 @@ public class Conta {
 
     private LocalDate dataVencimento;
 
-    @Enumerated(EnumType.STRING)
-    private Boolean situacao;
+   @Enumerated(EnumType.STRING)
+    private SituacaoConta situacao;
 
     @ManyToOne
     @JoinColumn(name = "id_morador_responsavel")
@@ -43,7 +45,7 @@ public class Conta {
 
     public Conta() {}
 
-    public Conta(Long id, Double valor, LocalDate dataVencimento, Boolean situacao, Morador morador,
+    public Conta(Long id, Double valor, LocalDate dataVencimento, SituacaoConta situacao, Morador morador,
             TipoConta tipoConta, String observacao) {
         this.id = id;
         this.valor = valor;
@@ -80,11 +82,11 @@ public class Conta {
         this.dataVencimento = dataVencimento;
     }
 
-    public Boolean getSituacao() {
+    public SituacaoConta getSituacao() {
         return situacao;
     }
 
-    public void setSituacao(Boolean situacao) {
+    public void setSituacao(SituacaoConta situacao) {
         this.situacao = situacao;
     }
 

@@ -3,12 +3,13 @@ package com.cefet.sgr_backend.dto;
 import java.time.LocalDate;
 
 import com.cefet.sgr_backend.entities.Conta;
+import com.cefet.sgr_backend.enums.SituacaoConta;
 
 public class ContaDTO {
     private Long id;
     private Double valor;
     private LocalDate dataVencimento;
-    private Boolean situacao;
+    private SituacaoConta situacao;
     private String observacao;
     private Long idMorador;
     private Long idTipoConta;
@@ -37,7 +38,7 @@ public class ContaDTO {
         return dataVencimento;
     }
 
-    public Boolean getSituacao() {
+    public SituacaoConta getSituacao() {
         return situacao;
     }
 
