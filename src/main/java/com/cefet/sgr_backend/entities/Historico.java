@@ -2,7 +2,11 @@ package com.cefet.sgr_backend.entities;
 
 import java.time.LocalDateTime;
 
+import com.cefet.sgr_backend.enums.SituacaoConta;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,7 +32,8 @@ public class Historico {
 
     private LocalDateTime data;
 
-    private Byte situacao;
+    @Enumerated(EnumType.STRING)
+    private SituacaoConta situacao;
 
     // Getters e Setters
 
@@ -64,11 +69,11 @@ public class Historico {
         this.data = data;
     }
 
-    public Byte getSituacao() {
+    public SituacaoConta getSituacao() {
         return situacao;
     }
 
-    public void setSituacao(Byte situacao) {
+    public void setSituacao(SituacaoConta situacao) {
         this.situacao = situacao;
     }
 

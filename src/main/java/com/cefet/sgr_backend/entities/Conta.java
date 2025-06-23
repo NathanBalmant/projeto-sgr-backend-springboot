@@ -33,11 +33,11 @@ public class Conta {
     private SituacaoConta situacao;
 
     @ManyToOne
-    @JoinColumn(name = "id_morador_responsavel")
+    @JoinColumn(name = "idMorador")
     private Morador morador;
 
     @ManyToOne
-    @JoinColumn(name = "id_tipo_conta")
+    @JoinColumn(name = "idTipoConta")
     private TipoConta tipoConta;
 
 

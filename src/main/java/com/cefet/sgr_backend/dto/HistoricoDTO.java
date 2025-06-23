@@ -4,13 +4,14 @@ import java.time.LocalDateTime;
 
 
 import com.cefet.sgr_backend.entities.Historico;
+import com.cefet.sgr_backend.enums.SituacaoConta;
 
 public class HistoricoDTO {
     private Long id;
     private Long idConta;
     private Long idMorador;
     private LocalDateTime data;
-    private Byte situacao;
+    private SituacaoConta situacao;
 
    public HistoricoDTO(){
 
@@ -40,7 +41,7 @@ public class HistoricoDTO {
          return data;
      }
 
-     public Byte getSituacao() {
+     public SituacaoConta getSituacao() {
          return situacao;
      }
 
