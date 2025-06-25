@@ -1,4 +1,5 @@
-INSERT INTO tb_tipo (name) VALUES ('Luz');        
+INSERT INTO tb_tipo (name) VALUES ('Luz');
+INSERT INTO tb_tipo (name) VALUES ('Água');         
 
 INSERT INTO tb_morador (nome, cpf, data_nascimento, celular, email, contato_familia, login, senha, foto) VALUES ('Samuel', '11993347666', '2004-05-12', '3196903134', 'samuferraz12052004@gmail.com', 'Mãe: 31988994231', 'samuel', '$2a$10$BEA2.iTet0ngrkNwcHXeY.S0hRMuaz1Lb2fV3ZcJe.mF97EiilYmi', '.');
 INSERT INTO tb_morador (nome, cpf, data_nascimento, celular, email, contato_familia, login, senha, foto) VALUES ('Ana', '98765432100', '2000-08-14', '31988887777', 'ana@gmail.com', 'Pai: 31977778888', 'ana', '$2a$10$7SFDNZaJkpjvhC1BVazx3e9vkSL7K1Fsn33J8oZn5bwx6m1FjnFpC', '*');
