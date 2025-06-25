@@ -54,7 +54,7 @@ public class MoradorController {
     }
 
     // Endpoint de login simples
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<String> login(@RequestBody Map<String, String> body) {
         String login = body.get("login");
         String senha = body.get("senha");
