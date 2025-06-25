@@ -85,5 +85,11 @@ public class ContaService {
         }
         contaRepository.deleteById(id);
     }
+
+    public List<ContaDTO> findByMorador(Long moradorId) {
+        List<Conta> contas = contaRepository.findByMoradorId(moradorId);
+        return contas.stream().map(ContaDTO::new).toList();
+    }
+    
 }
 

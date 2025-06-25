@@ -16,6 +16,12 @@ public class ContaController {
     @Autowired
     private ContaService contaService;
 
+    @GetMapping("/moradores/{moradorId}")
+    public ResponseEntity<List<ContaDTO>> findByMorador(@PathVariable Long moradorId) {
+        List<ContaDTO> lista = contaService.findByMorador(moradorId);
+        return ResponseEntity.ok(lista);
+    }
+
     @GetMapping
     public ResponseEntity<List<ContaDTO>> findAll() {
         List<ContaDTO> lista = contaService.findAll();
