@@ -1,0 +1,116 @@
+package com.cefet.sgr_backend.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cefet.sgr_backend.dto.RateioDto;
+import com.cefet.sgr_backend.entities.Conta;
+import com.cefet.sgr_backend.entities.Morador;
+import com.cefet.sgr_backend.entities.Rateio;
+import com.cefet.sgr_backend.enums.SituacaoConta;
+import com.cefet.sgr_backend.repositories.ContaRepository;
+import com.cefet.sgr_backend.repositories.MoradorRepository;
+import com.cefet.sgr_backend.repositories.RateioRepository;
+
+import jakarta.persistence.EntityNotFoundException;
+
+@Service
+public class RateioService {
+
+    @Autowired
+    private RateioRepository rateioRepository;
+
+    @Autowired
+    private MoradorRepository moradorRepository;
+
+    @Autowired
+    private ContaRepository contaRepository;
+
+    public List<RateioDto> findAll() {
+        return rateioRepository.findAll().stream().map(RateioDto::new).toList();
+    }
+
+    public RateioDto findById(Long id) {
+        Rateio rateio = rateioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Rateio não encontrado com ID: " + id));
+        return new RateioDto(rateio);
+    }
+
+    public RateioDto insert(RateioDto dto) {
+    Conta conta = contaRepository.findById(dto.getIdConta())
+        .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
+
+    //aqui é uma regra de negocio para a soma do rateio não exceder o valor da conta
+    double somaRateios = rateioRepository.findByContaId(dto.getIdConta())
+        .stream()
+        .mapToDouble(Rateio::getValor)
+        .sum();
+
+    double novaSoma = somaRateios + dto.getValor();
+    if (novaSoma > conta.getValor()) {
+        throw new IllegalArgumentException("A soma dos rateios excede o valor da conta.");
+    }
+
+    Rateio rateio = new Rateio();
+    rateio.setValor(dto.getValor());
+    rateio.setSituacao(dto.getSituacao());
+
+    Morador morador = moradorRepository.findById(dto.getIdMorador())
+        .orElseThrow(() -> new EntityNotFoundException("Morador não encontrado"));
+
+    rateio.setMorador(morador);
+    rateio.setConta(conta);
+
+    Rateio salvo = rateioRepository.save(rateio);
+    return new RateioDto(salvo);
+}
+
+
+    public RateioDto update(Long id, RateioDto dto) {
+    Rateio rateio = rateioRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("Rateio não encontrado"));
+
+        //aqui é uma regra de negocio da rf-004, para não atualizar um rateio onde a conta dela está quitada/cancelada
+    Conta conta = rateio.getConta();
+    if (conta.getSituacao() == SituacaoConta.QUITADA || conta.getSituacao() == SituacaoConta.CANCELADA) {
+        throw new IllegalStateException("Rateios de contas finalizadas não podem ser alterados.");
+    }
+
+
+    double somaRateios = rateioRepository.findByContaId(conta.getId())
+        .stream()
+        .filter(r -> !r.getId().equals(id))  
+        .mapToDouble(Rateio::getValor)
+        .sum();
+
+    double novaSoma = somaRateios + dto.getValor();
+    if (novaSoma > conta.getValor()) {
+        throw new IllegalArgumentException("A soma dos rateios excede o valor da conta.");
+    }
+
+    rateio.setValor(dto.getValor());
+    rateio.setSituacao(dto.getSituacao());
+
+    return new RateioDto(rateioRepository.save(rateio));
+}
+
+
+    public void delete(Long id) {
+        if (!rateioRepository.existsById(id)) {
+            throw new EntityNotFoundException("Rateio não encontrado com ID: " + id);
+        }
+        rateioRepository.deleteById(id);
+    }
+
+    public List<RateioDto> findByContaId(Long idConta) {
+    List<Rateio> lista = rateioRepository.findByContaId(idConta);
+    return lista.stream().map(RateioDto::new).toList();
+    }
+
+    public List<RateioDto> findByMoradorId(Long idMorador) {
+    List<Rateio> lista = rateioRepository.findByMoradorId(idMorador);
+    return lista.stream().map(RateioDto::new).toList();
+    }
+}

@@ -61,7 +61,11 @@ public class ContaService {
     public ContaDTO update(Long id, ContaDTO dto) {
         Conta conta = contaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada com ID: " + id));
-
+                //aqui é uma condicional onde nega atualizar dados de uma conta que foi quitada/cancelada(rf-004)
+        if (conta.getSituacao() == SituacaoConta.QUITADA || conta.getSituacao() == SituacaoConta.CANCELADA) {
+        System.out.println("Tentativa de editar conta " + id + " com situação finalizada: " + conta.getSituacao());
+        throw new IllegalStateException("Contas quitadas ou canceladas não podem ser alteradas.");
+        }
         conta.setValor(dto.getValor());
         conta.setDataVencimento(dto.getDataVencimento());
         conta.setSituacao(dto.getSituacao());
