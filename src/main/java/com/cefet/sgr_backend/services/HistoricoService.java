@@ -57,6 +57,16 @@ public class HistoricoService {
         return new HistoricoDTO(salvo);
     }
 
+    public List<HistoricoDTO> findByContaId(Long idConta) {
+        return historicoRepository.findByContaId(idConta).stream()
+                .map(HistoricoDTO::new).toList();
+    }
+    
+    public List<HistoricoDTO> findByMoradorId(Long idMorador) {
+        return historicoRepository.findByMoradorId(idMorador).stream()
+                .map(HistoricoDTO::new).toList();
+    }
+
     public void registrarAlteracaoSituacao(Conta conta, Morador morador, SituacaoConta novaSituacao) {
         Historico historico = new Historico();
         historico.setConta(conta);

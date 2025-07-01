@@ -16,6 +16,17 @@ public class HistoricoController {
     @Autowired
     private HistoricoService historicoService;
 
+    @GetMapping("/conta/{idConta}")
+    public ResponseEntity<List<HistoricoDTO>> findByConta(@PathVariable Long idConta) {
+        List<HistoricoDTO> lista = historicoService.findByContaId(idConta);
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/morador/{idMorador}")
+    public ResponseEntity<List<HistoricoDTO>> findByMorador(@PathVariable Long idMorador) {
+        List<HistoricoDTO> lista = historicoService.findByMoradorId(idMorador);
+        return ResponseEntity.ok(lista);
+    }
 
     @GetMapping
     public ResponseEntity<List<HistoricoDTO>> findAll() {
@@ -23,7 +34,6 @@ public class HistoricoController {
         return ResponseEntity.ok(lista);
     }
 
- 
     @GetMapping("/{id}")
     public ResponseEntity<HistoricoDTO> findById(@PathVariable Long id) {
         HistoricoDTO dto = historicoService.findById(id);
@@ -35,6 +45,5 @@ public class HistoricoController {
         HistoricoDTO novo = historicoService.insert(dto);
         return ResponseEntity.status(201).body(novo);
     }
-
 
 }
