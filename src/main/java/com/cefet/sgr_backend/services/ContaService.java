@@ -46,7 +46,8 @@ public class ContaService {
         Conta conta = new Conta();
         conta.setValor(dto.getValor());
         conta.setDataVencimento(dto.getDataVencimento());
-        conta.setSituacao(SituacaoConta.PENDENTE); // aqui começa com pendente pq toda conta cadastrada é uma nova conta. Na teoria, não está paga
+        conta.setSituacao(SituacaoConta.PENDENTE); // aqui começa com pendente pq toda conta cadastrada é uma nova
+                                                   // conta. Na teoria, não está paga
         conta.setObservacao(dto.getObservacao());
 
         Morador morador = moradorRepository.findById(dto.getIdMorador())
@@ -54,7 +55,8 @@ public class ContaService {
         conta.setMorador(morador);
 
         TipoConta tipoConta = tipoContaRepository.findById(dto.getIdTipoConta())
-                .orElseThrow(() -> new EntityNotFoundException("Tipo de conta não encontrado com ID: " + dto.getIdTipoConta()));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Tipo de conta não encontrado com ID: " + dto.getIdTipoConta()));
         conta.setTipoConta(tipoConta);
 
         Conta salva = contaRepository.save(conta);
@@ -64,10 +66,11 @@ public class ContaService {
     public ContaDTO update(Long id, ContaDTO dto) {
         Conta conta = contaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada com ID: " + id));
-                //aqui é uma condicional onde nega atualizar dados de uma conta que foi quitada/cancelada(rf-004)
+        // aqui é uma condicional onde nega atualizar dados de uma conta que foi
+        // quitada/cancelada(rf-004)
         if (conta.getSituacao() == SituacaoConta.QUITADA || conta.getSituacao() == SituacaoConta.CANCELADA) {
-        System.out.println("Tentativa de editar conta " + id + " com situação finalizada: " + conta.getSituacao());
-        throw new IllegalStateException("Contas quitadas ou canceladas não podem ser alteradas.");
+            System.out.println("Tentativa de editar conta " + id + " com situação finalizada: " + conta.getSituacao());
+            throw new IllegalStateException("Contas quitadas ou canceladas não podem ser alteradas.");
         }
         conta.setValor(dto.getValor());
         conta.setDataVencimento(dto.getDataVencimento());
@@ -79,7 +82,8 @@ public class ContaService {
         conta.setMorador(morador);
 
         TipoConta tipoConta = tipoContaRepository.findById(dto.getIdTipoConta())
-                .orElseThrow(() -> new EntityNotFoundException("Tipo de conta não encontrado com ID: " + dto.getIdTipoConta()));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Tipo de conta não encontrado com ID: " + dto.getIdTipoConta()));
         conta.setTipoConta(tipoConta);
 
         Conta atualizada = contaRepository.save(conta);
@@ -98,60 +102,74 @@ public class ContaService {
         return contas.stream().map(ContaDTO::new).toList();
     }
 
-
     public ContaDTO quitarConta(Long idConta, Long idMorador) {
-    Conta conta = contaRepository.findById(idConta)
-        .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
+        Conta conta = contaRepository.findById(idConta)
+                .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
 
-    if (conta.getSituacao() == SituacaoConta.QUITADA) {
-        throw new IllegalStateException("Conta já está quitada.");
+        if (conta.getSituacao() == SituacaoConta.QUITADA) {
+            throw new IllegalStateException("Conta já está quitada.");
+        }
+
+        conta.setSituacao(SituacaoConta.QUITADA);
+        contaRepository.save(conta);
+
+        Morador morador = moradorRepository.findById(idMorador)
+                .orElseThrow(() -> new EntityNotFoundException("Morador não encontrado"));
+
+        historicoService.registrarAlteracaoSituacao(conta, morador, SituacaoConta.QUITADA);
+        return new ContaDTO(conta);
     }
 
-    conta.setSituacao(SituacaoConta.QUITADA);
-    contaRepository.save(conta);
+    public ContaDTO cancelarConta(Long idConta, Long idMorador) {
+        Conta conta = contaRepository.findById(idConta)
+                .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
 
-    Morador morador = moradorRepository.findById(idMorador)
-        .orElseThrow(() -> new EntityNotFoundException("Morador não encontrado"));
+        if (conta.getSituacao() == SituacaoConta.CANCELADA) {
+            throw new IllegalStateException("Conta já está cancelada.");
+        }
 
-    historicoService.registrarAlteracaoSituacao(conta, morador, SituacaoConta.QUITADA);
-    return new ContaDTO(conta);
-}
+        conta.setSituacao(SituacaoConta.CANCELADA);
+        contaRepository.save(conta);
 
-public ContaDTO cancelarConta(Long idConta, Long idMorador) {
-    Conta conta = contaRepository.findById(idConta)
-        .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
+        Morador morador = moradorRepository.findById(idMorador)
+                .orElseThrow(() -> new EntityNotFoundException("Morador não encontrado"));
 
-    if (conta.getSituacao() == SituacaoConta.CANCELADA) {
-        throw new IllegalStateException("Conta já está cancelada.");
+        historicoService.registrarAlteracaoSituacao(conta, morador, SituacaoConta.CANCELADA);
+        return new ContaDTO(conta);
     }
 
-    conta.setSituacao(SituacaoConta.CANCELADA);
-    contaRepository.save(conta);
+    public ContaDTO reabrirConta(Long idConta, Long idMorador) {
+        Conta conta = contaRepository.findById(idConta)
+                .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
 
-    Morador morador = moradorRepository.findById(idMorador)
-        .orElseThrow(() -> new EntityNotFoundException("Morador não encontrado"));
+        if (conta.getSituacao() == SituacaoConta.PENDENTE) {
+            throw new IllegalStateException("Conta já está pendente.");
+        }
 
-    historicoService.registrarAlteracaoSituacao(conta, morador, SituacaoConta.CANCELADA);
-    return new ContaDTO(conta);
-}
+        conta.setSituacao(SituacaoConta.PENDENTE);
+        contaRepository.save(conta);
 
-public ContaDTO reabrirConta(Long idConta, Long idMorador) {
-    Conta conta = contaRepository.findById(idConta)
-        .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
+        Morador morador = moradorRepository.findById(idMorador)
+                .orElseThrow(() -> new EntityNotFoundException("Morador não encontrado"));
 
-    if (conta.getSituacao() == SituacaoConta.PENDENTE) {
-        throw new IllegalStateException("Conta já está pendente.");
+        historicoService.registrarAlteracaoSituacao(conta, morador, SituacaoConta.PENDENTE);
+        return new ContaDTO(conta);
     }
 
-    conta.setSituacao(SituacaoConta.PENDENTE);
-    contaRepository.save(conta);
+    public ContaDTO replicar(Long idConta) {
+        Conta contaOriginal = contaRepository.findById(idConta)
+                .orElseThrow(() -> new EntityNotFoundException("Conta original não encontrada"));
 
-    Morador morador = moradorRepository.findById(idMorador)
-        .orElseThrow(() -> new EntityNotFoundException("Morador não encontrado"));
+        Conta novaConta = new Conta();
+        novaConta.setValor(contaOriginal.getValor());
+        novaConta.setDataVencimento(contaOriginal.getDataVencimento());
+        novaConta.setSituacao(SituacaoConta.PENDENTE); 
+        novaConta.setObservacao(contaOriginal.getObservacao() + " (Cópia)");
+        novaConta.setMorador(contaOriginal.getMorador());
+        novaConta.setTipoConta(contaOriginal.getTipoConta());
 
-    historicoService.registrarAlteracaoSituacao(conta, morador, SituacaoConta.PENDENTE);
-    return new ContaDTO(conta);
+        Conta salva = contaRepository.save(novaConta);
+        return new ContaDTO(salva);
+    }
+
 }
-    
-}
-

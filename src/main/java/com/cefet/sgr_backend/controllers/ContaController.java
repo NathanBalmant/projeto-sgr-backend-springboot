@@ -62,14 +62,14 @@ public class ContaController {
 
     @PutMapping("/{id}/quitar")
     public ResponseEntity<ContaDTO> quitarConta(@PathVariable Long id, @RequestParam Long moradorId) {
-    ContaDTO dto = contaService.quitarConta(id, moradorId);
-    return ResponseEntity.ok(dto);
+        ContaDTO dto = contaService.quitarConta(id, moradorId);
+        return ResponseEntity.ok(dto);
     }
 
     @PutMapping("/{id}/cancelar")
     public ResponseEntity<ContaDTO> cancelarConta(@PathVariable Long id, @RequestParam Long moradorId) {
-    ContaDTO dto = contaService.cancelarConta(id, moradorId);
-    return ResponseEntity.ok(dto);
+        ContaDTO dto = contaService.cancelarConta(id, moradorId);
+        return ResponseEntity.ok(dto);
     }
 
     @PutMapping("/{id}/reabrir")
@@ -77,5 +77,12 @@ public class ContaController {
         ContaDTO dto = contaService.reabrirConta(id, moradorId);
         return ResponseEntity.ok(dto);
     }
+
+    @PostMapping("/{id}/replicar")
+    public ResponseEntity<ContaDTO> copiarConta(@PathVariable Long id) {
+        ContaDTO nova = contaService.replicar(id);
+        return ResponseEntity.status(201).body(nova);
+    }
+    
 
 }
