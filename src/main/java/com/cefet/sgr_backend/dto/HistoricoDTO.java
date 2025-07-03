@@ -2,7 +2,6 @@ package com.cefet.sgr_backend.dto;
 
 import java.time.LocalDateTime;
 
-
 import com.cefet.sgr_backend.entities.Historico;
 import com.cefet.sgr_backend.enums.SituacaoConta;
 
@@ -44,9 +43,4 @@ public class HistoricoDTO {
      public SituacaoConta getSituacao() {
          return situacao;
      }
-
-    
-
-
-
 }

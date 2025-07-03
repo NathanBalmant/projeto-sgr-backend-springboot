@@ -3,7 +3,7 @@ package com.cefet.sgr_backend.dto;
 import com.cefet.sgr_backend.entities.Rateio;
 import com.cefet.sgr_backend.enums.SituacaoRateio;
 
-public class RateioDto {
+public class RateioDTO {
 
     private Long id;
     private Double valor;
@@ -11,10 +11,10 @@ public class RateioDto {
     private Long idMorador;
     private Long idConta;
 
-    public RateioDto() {
+    public RateioDTO() {
     }
 
-    public RateioDto(Rateio rateio) {
+    public RateioDTO(Rateio rateio) {
         this.id = rateio.getId();
         this.valor = rateio.getValor();
         this.situacao = rateio.getSituacao();

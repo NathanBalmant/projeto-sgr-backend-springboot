@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cefet.sgr_backend.dto.RateioDto;
+import com.cefet.sgr_backend.dto.RateioDTO;
 import com.cefet.sgr_backend.entities.Conta;
 import com.cefet.sgr_backend.entities.Morador;
 import com.cefet.sgr_backend.entities.Rateio;
@@ -28,17 +28,17 @@ public class RateioService {
     @Autowired
     private ContaRepository contaRepository;
 
-    public List<RateioDto> findAll() {
-        return rateioRepository.findAll().stream().map(RateioDto::new).toList();
+    public List<RateioDTO> findAll() {
+        return rateioRepository.findAll().stream().map(RateioDTO::new).toList();
     }
 
-    public RateioDto findById(Long id) {
+    public RateioDTO findById(Long id) {
         Rateio rateio = rateioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Rateio não encontrado com ID: " + id));
-        return new RateioDto(rateio);
+        return new RateioDTO(rateio);
     }
 
-    public RateioDto insert(RateioDto dto) {
+    public RateioDTO insert(RateioDTO dto) {
     Conta conta = contaRepository.findById(dto.getIdConta())
         .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
 
@@ -64,11 +64,11 @@ public class RateioService {
     rateio.setConta(conta);
 
     Rateio salvo = rateioRepository.save(rateio);
-    return new RateioDto(salvo);
+    return new RateioDTO(salvo);
 }
 
 
-    public RateioDto update(Long id, RateioDto dto) {
+    public RateioDTO update(Long id, RateioDTO dto) {
     Rateio rateio = rateioRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException("Rateio não encontrado"));
 
@@ -93,7 +93,7 @@ public class RateioService {
     rateio.setValor(dto.getValor());
     rateio.setSituacao(dto.getSituacao());
 
-    return new RateioDto(rateioRepository.save(rateio));
+    return new RateioDTO(rateioRepository.save(rateio));
 }
 
 
@@ -104,13 +104,13 @@ public class RateioService {
         rateioRepository.deleteById(id);
     }
 
-    public List<RateioDto> findByContaId(Long idConta) {
+    public List<RateioDTO> findByContaId(Long idConta) {
     List<Rateio> lista = rateioRepository.findByContaId(idConta);
-    return lista.stream().map(RateioDto::new).toList();
+    return lista.stream().map(RateioDTO::new).toList();
     }
 
-    public List<RateioDto> findByMoradorId(Long idMorador) {
+    public List<RateioDTO> findByMoradorId(Long idMorador) {
     List<Rateio> lista = rateioRepository.findByMoradorId(idMorador);
-    return lista.stream().map(RateioDto::new).toList();
+    return lista.stream().map(RateioDTO::new).toList();
     }
 }

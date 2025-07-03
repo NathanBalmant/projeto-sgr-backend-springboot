@@ -4,7 +4,15 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.cefet.sgr_backend.dto.ContaDTO;
 import com.cefet.sgr_backend.services.ContaService;
@@ -51,4 +59,23 @@ public class ContaController {
         contaService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}/quitar")
+    public ResponseEntity<ContaDTO> quitarConta(@PathVariable Long id, @RequestParam Long moradorId) {
+    ContaDTO dto = contaService.quitarConta(id, moradorId);
+    return ResponseEntity.ok(dto);
+    }
+
+    @PutMapping("/{id}/cancelar")
+    public ResponseEntity<ContaDTO> cancelarConta(@PathVariable Long id, @RequestParam Long moradorId) {
+    ContaDTO dto = contaService.cancelarConta(id, moradorId);
+    return ResponseEntity.ok(dto);
+    }
+
+    @PutMapping("/{id}/reabrir")
+    public ResponseEntity<ContaDTO> reabrirConta(@PathVariable Long id, @RequestParam Long moradorId) {
+        ContaDTO dto = contaService.reabrirConta(id, moradorId);
+        return ResponseEntity.ok(dto);
+    }
+
 }
