@@ -83,6 +83,4 @@ public class ContaController {
         ContaDTO nova = contaService.replicar(id);
         return ResponseEntity.status(201).body(nova);
     }
-    
-
 }

@@ -65,4 +65,10 @@ public class RateioController {
     return ResponseEntity.ok(lista);
     }
 
+    @GetMapping("/morador/{idMorador}/saldo")
+    public ResponseEntity<Double> calcularSaldo(@PathVariable Long idMorador) {
+    Double saldo = rateioService.calcularSaldoMorador(idMorador);
+    return ResponseEntity.ok(saldo);
+}
+
 }

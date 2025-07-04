@@ -113,4 +113,10 @@ public class RateioService {
     List<Rateio> lista = rateioRepository.findByMoradorId(idMorador);
     return lista.stream().map(RateioDTO::new).toList();
     }
+
+    public Double calcularSaldoMorador(Long moradorId) {
+    Double saldo = rateioRepository.calcularSaldoMorador(moradorId);
+    return saldo != null ? saldo : 0.0;
+}
+
 }
