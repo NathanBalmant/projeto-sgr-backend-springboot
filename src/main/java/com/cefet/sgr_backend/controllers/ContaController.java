@@ -1,5 +1,6 @@
 package com.cefet.sgr_backend.controllers;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,5 +83,17 @@ public class ContaController {
     public ResponseEntity<ContaDTO> copiarConta(@PathVariable Long id) {
         ContaDTO nova = contaService.replicar(id);
         return ResponseEntity.status(201).body(nova);
+    }
+
+    @GetMapping("/extrato")
+    public ResponseEntity<List<ContaDTO>> getExtratoPorPeriodo(
+        @RequestParam String dataInicial,
+        @RequestParam String dataFinal) {
+
+    LocalDate inicio = LocalDate.parse(dataInicial);
+    LocalDate fim = LocalDate.parse(dataFinal);
+
+    List<ContaDTO> extrato = contaService.buscarExtratoPorPeriodo(inicio, fim);
+    return ResponseEntity.ok(extrato);
     }
 }

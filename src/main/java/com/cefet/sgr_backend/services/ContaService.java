@@ -1,5 +1,6 @@
 package com.cefet.sgr_backend.services;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,6 +171,11 @@ public class ContaService {
 
         Conta salva = contaRepository.save(novaConta);
         return new ContaDTO(salva);
+    }
+
+    public List<ContaDTO> buscarExtratoPorPeriodo(LocalDate dataInicial, LocalDate dataFinal) {
+    List<Conta> contas = contaRepository.findByDataVencimentoBetween(dataInicial, dataFinal);
+    return contas.stream().map(ContaDTO::new).toList();
     }
 
 }
