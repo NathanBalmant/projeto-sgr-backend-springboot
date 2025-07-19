@@ -178,4 +178,10 @@ public class ContaService {
     return contas.stream().map(ContaDTO::new).toList();
     }
 
+
+    public List<ContaDTO> findPendentes() {
+    List<Conta> pendentes = contaRepository.findBySituacao(SituacaoConta.PENDENTE);
+    return pendentes.stream().map(ContaDTO::new).toList();
+}
+
 }

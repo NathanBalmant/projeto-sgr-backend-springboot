@@ -96,4 +96,10 @@ public class ContaController {
     List<ContaDTO> extrato = contaService.buscarExtratoPorPeriodo(inicio, fim);
     return ResponseEntity.ok(extrato);
     }
+
+    @GetMapping("/pendentes")
+    public ResponseEntity<List<ContaDTO>> findPendentes() {
+    List<ContaDTO> lista = contaService.findPendentes();
+    return ResponseEntity.ok(lista);
+}
 }
