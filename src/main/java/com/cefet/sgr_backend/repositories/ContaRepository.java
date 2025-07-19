@@ -13,5 +13,4 @@ public interface ContaRepository extends JpaRepository<Conta, Long>{
     List<Conta> findByMoradorId(Long moradorId);
     List<Conta> findByDataVencimentoBetween(LocalDate dataInicial, LocalDate dataFinal);
     List<Conta> findBySituacao(SituacaoConta situacao);
-
 }

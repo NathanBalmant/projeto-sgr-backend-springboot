@@ -1,7 +1,9 @@
 INSERT INTO tb_tipo (name) VALUES ('Luz');
-INSERT INTO tb_tipo (name) VALUES ('Água');   
+INSERT INTO tb_tipo (name) VALUES ('Água');
 INSERT INTO tb_tipo (name) VALUES ('Internet'); 
-INSERT INTO tb_tipo (name) VALUES ('Condominio');     
+INSERT INTO tb_tipo (name) VALUES ('Condominio');
+INSERT INTO tb_tipo (name) VALUES ('Aluguel');
+INSERT INTO tb_tipo (name) VALUES ('Limpeza');
 
 INSERT INTO tb_morador (nome, cpf, data_nascimento, celular, email, contato_familia, login, senha, foto) VALUES ('Samuel', '11993347666', '2004-05-12', '3196903134', 'samuferraz12052004@gmail.com', 'Mãe: 31988994231', 'samuel', '$2a$10$BEA2.iTet0ngrkNwcHXeY.S0hRMuaz1Lb2fV3ZcJe.mF97EiilYmi', '.');
 INSERT INTO tb_morador (nome, cpf, data_nascimento, celular, email, contato_familia, login, senha, foto) VALUES ('Ana', '98765432100', '2000-08-14', '31988887777', 'ana@gmail.com', 'Pai: 31977778888', 'ana', '$2a$10$7SFDNZaJkpjvhC1BVazx3e9vkSL7K1Fsn33J8oZn5bwx6m1FjnFpC', '*');
@@ -12,6 +14,10 @@ INSERT INTO tb_conta (valor, data_vencimento, situacao, id_morador, id_tipo_cont
 INSERT INTO tb_conta (valor, data_vencimento, situacao, id_morador, id_tipo_conta, observacao) VALUES (100.00, '2025-07-11', 'QUITADA', 1, 2, 'Conta de água de julho');
 INSERT INTO tb_conta (valor, data_vencimento, situacao, id_morador, id_tipo_conta, observacao) VALUES (200.00, '2025-07-12', 'QUITADA', 1, 3, 'Conta de internet de julho');
 INSERT INTO tb_conta (valor, data_vencimento, situacao, id_morador, id_tipo_conta, observacao) VALUES (300.00, '2025-07-11', 'PENDENTE', 1, 4, 'Conta de internet de julho');
+INSERT INTO tb_conta (valor, data_vencimento, situacao, id_morador, id_tipo_conta, observacao) VALUES (1200.00, '2025-07-25', 'PENDENTE', 1, 5, 'Aluguel do mês de julho'); 
+INSERT INTO tb_conta (valor, data_vencimento, situacao, id_morador, id_tipo_conta, observacao) VALUES (300.00, '2025-08-02', 'PENDENTE', 2, 6, 'Gastos com limpeza de julho');    
+
+
 
 INSERT INTO tb_rateio (valor, situacao, id_morador, id_conta) VALUES (75.00, 'EM_ABERTO', 2, 1);
 INSERT INTO tb_rateio (valor, situacao, id_morador, id_conta) VALUES (75.00, 'PAGO', 3, 1);
@@ -19,6 +25,12 @@ INSERT INTO tb_rateio (valor, situacao, id_morador, id_conta) VALUES (100.00, 'P
 INSERT INTO tb_rateio (valor, situacao, id_morador, id_conta) VALUES (100.00, 'PAGO', 2, 3);
 INSERT INTO tb_rateio (valor, situacao, id_morador, id_conta) VALUES (150.00, 'EM_ABERTO', 2, 4);
 INSERT INTO tb_rateio (valor, situacao, id_morador, id_conta) VALUES (150.00, 'EM_ABERTO', 1, 4);
+INSERT INTO tb_rateio (valor, situacao, id_morador, id_conta) VALUES (400.00, 'EM_ABERTO', 1, 5); 
+INSERT INTO tb_rateio (valor, situacao, id_morador, id_conta) VALUES (400.00, 'EM_ABERTO', 2, 5); 
+INSERT INTO tb_rateio (valor, situacao, id_morador, id_conta) VALUES (400.00, 'EM_ABERTO', 3, 5); 
+INSERT INTO tb_rateio (valor, situacao, id_morador, id_conta) VALUES (100.00, 'EM_ABERTO', 3, 6);
+INSERT INTO tb_rateio (valor, situacao, id_morador, id_conta) VALUES (100.00, 'PAGO', 1, 6);
+INSERT INTO tb_rateio (valor, situacao, id_morador, id_conta) VALUES (100.00, 'EM_ABERTO', 2, 6);
 
 INSERT INTO tb_historico (id_conta, id_morador, data, situacao) VALUES (1, 1, '2025-06-25T14:30:00', 'PENDENTE'); 
-INSERT INTO tb_historico (id_conta, id_morador, data, situacao) VALUES (2, 3, '2024-08-30T14:30:00', 'CANCELADA'); 
+INSERT INTO tb_historico (id_conta, id_morador, data, situacao) VALUES (2, 3, '2024-08-30T14:30:00', 'CANCELADA');

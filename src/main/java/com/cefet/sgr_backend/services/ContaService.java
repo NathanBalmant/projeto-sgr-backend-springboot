@@ -2,17 +2,24 @@ package com.cefet.sgr_backend.services;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cefet.sgr_backend.dto.ContaDTO;
+import com.cefet.sgr_backend.dto.GastoPorMoradorDTO;
+import com.cefet.sgr_backend.dto.GastoPorTipoDTO;
 import com.cefet.sgr_backend.entities.Conta;
 import com.cefet.sgr_backend.entities.Morador;
+import com.cefet.sgr_backend.entities.Rateio;
 import com.cefet.sgr_backend.entities.TipoConta;
 import com.cefet.sgr_backend.enums.SituacaoConta;
+import com.cefet.sgr_backend.enums.SituacaoRateio;
 import com.cefet.sgr_backend.repositories.ContaRepository;
 import com.cefet.sgr_backend.repositories.MoradorRepository;
+import com.cefet.sgr_backend.repositories.RateioRepository;
 import com.cefet.sgr_backend.repositories.TipoContaRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -31,6 +38,9 @@ public class ContaService {
 
     @Autowired
     private HistoricoService historicoService;
+
+    @Autowired
+    private RateioRepository rateioRepository;
 
     public List<ContaDTO> findAll() {
         List<Conta> lista = contaRepository.findAll();
@@ -179,9 +189,56 @@ public class ContaService {
     }
 
 
-    public List<ContaDTO> findPendentes() {
-    List<Conta> pendentes = contaRepository.findBySituacao(SituacaoConta.PENDENTE);
-    return pendentes.stream().map(ContaDTO::new).toList();
-}
+    public List<ContaDTO> findPendentes() { 
+        List<Conta> pendentes = contaRepository.findBySituacao(SituacaoConta.PENDENTE);
+        return pendentes.stream().map(ContaDTO::new).toList();
+    }
 
+    public List<GastoPorTipoDTO> getGastosPorTipo() {
+        // Pega apenas as contas que estão PENDENTES (em aberto)
+        List<Conta> contasPendentes = contaRepository.findBySituacao(SituacaoConta.PENDENTE);
+
+        // Agrupa as contas pelo nome do tipo de conta e soma os valores
+        Map<String, Double> gastosPorTipo = contasPendentes.stream()
+            .collect(Collectors.groupingBy(
+                conta -> conta.getTipoConta().getNome(), // Agrupa pelo nome do TipoConta
+                Collectors.summingDouble(Conta::getValor) // Soma o valor total da conta
+            ));
+
+        // Converte o mapa resultante em uma lista de DTOs para ser retornada pela API
+        return gastosPorTipo.entrySet().stream()
+            .map(entry -> new GastoPorTipoDTO(entry.getKey(), entry.getValue()))
+            .toList();
+    }
+
+    public List<GastoPorMoradorDTO> getGastosPorMorador() {
+        // 1. Encontra todas as contas que estão PENDENTES
+        List<Conta> contasPendentes = contaRepository.findBySituacao(SituacaoConta.PENDENTE);
+        
+        // Se não houver contas pendentes, não há gastos a distribuir.
+        if (contasPendentes.isEmpty()) {
+            return List.of(); // Retorna uma lista vazia
+        }
+
+        // 2. Coleta os IDs de todas as contas pendentes
+        List<Long> idsContasPendentes = contasPendentes.stream()
+                                                    .map(Conta::getId)
+                                                    .toList();
+        
+        // 3. Encontra todos os rateios dessas contas pendentes que ainda estão 'EM_ABERTO'
+        //    Isso representa a dívida atual de cada morador nas contas pendentes da república.
+        List<Rateio> rateiosEmAbertoDeContasPendentes = rateioRepository.findByContaIdInAndSituacao(idsContasPendentes, SituacaoRateio.EM_ABERTO);
+
+        // 4. Agrupa os rateios pelo nome do morador e soma os valores devidos
+        Map<String, Double> gastosPorMorador = rateiosEmAbertoDeContasPendentes.stream()
+            .collect(Collectors.groupingBy(
+                rateio -> rateio.getMorador().getNome(), // Agrupa pelo nome do Morador
+                Collectors.summingDouble(Rateio::getValor) // Soma o valor do rateio
+            ));
+
+        // 5. Converte o mapa resultante em uma lista de DTOs para ser retornada pela API
+        return gastosPorMorador.entrySet().stream()
+            .map(entry -> new GastoPorMoradorDTO(entry.getKey(), entry.getValue()))
+            .toList();
+    }
 }

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cefet.sgr_backend.dto.ContaDTO;
+import com.cefet.sgr_backend.dto.GastoPorMoradorDTO;
+import com.cefet.sgr_backend.dto.GastoPorTipoDTO;
 import com.cefet.sgr_backend.services.ContaService;
 
 @RestController
@@ -101,5 +103,18 @@ public class ContaController {
     public ResponseEntity<List<ContaDTO>> findPendentes() {
     List<ContaDTO> lista = contaService.findPendentes();
     return ResponseEntity.ok(lista);
-}
+    }
+
+    @GetMapping("/dashboard/gastos-por-tipo")
+    public ResponseEntity<List<GastoPorTipoDTO>> getGastosPorTipoDashboard() {
+        List<GastoPorTipoDTO> gastos = contaService.getGastosPorTipo();
+        return ResponseEntity.ok(gastos);
+    }
+
+    @GetMapping("/dashboard/gastos-por-morador")
+    public ResponseEntity<List<GastoPorMoradorDTO>> getGastosPorMoradorDashboard() {
+        List<GastoPorMoradorDTO> gastos = contaService.getGastosPorMorador();
+        return ResponseEntity.ok(gastos);
+    }
+
 }
