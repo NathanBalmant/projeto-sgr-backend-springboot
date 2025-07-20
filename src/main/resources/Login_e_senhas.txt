@@ -1,7 +1,0 @@
-Logins e senhas já cadastrados: /
-
-Login: samuel || Senha: 1234
-
-Login: ana || Senha: abcd
-
-Login: joao || Senha: ghj
