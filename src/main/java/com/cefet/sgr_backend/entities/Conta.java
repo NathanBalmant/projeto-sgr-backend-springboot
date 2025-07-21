@@ -1,10 +1,12 @@
 package com.cefet.sgr_backend.entities;
 
 import java.time.LocalDate;
-import java.util.Objects;
+import java.util.List;
+import java.util.Objects; // Importar List
 
 import com.cefet.sgr_backend.enums.SituacaoConta;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -13,7 +15,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.OneToMany; 
+import jakarta.persistence.Table; 
+
 
 @Entity
 @Table(name = "tb_conta")
@@ -23,13 +27,11 @@ public class Conta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private Double valor;
-
 
     private LocalDate dataVencimento;
 
-   @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private SituacaoConta situacao;
 
     @ManyToOne
@@ -40,8 +42,10 @@ public class Conta {
     @JoinColumn(name = "idTipoConta")
     private TipoConta tipoConta;
 
-
     private String observacao;
+
+    @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rateio> rateios; 
 
     public Conta() {}
 
@@ -56,9 +60,7 @@ public class Conta {
         this.observacao = observacao;
     }
 
-    
-
-   public Long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -114,7 +116,15 @@ public class Conta {
         this.observacao = observacao;
     }
 
-   @Override
+    public List<Rateio> getRateios() {
+        return rateios;
+    }
+
+    public void setRateios(List<Rateio> rateios) {
+        this.rateios = rateios;
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(id);
     }
