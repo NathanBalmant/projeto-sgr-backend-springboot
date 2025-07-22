@@ -31,6 +31,7 @@ INSERT INTO tb_rateio (valor, situacao, id_morador, id_conta) VALUES (400.00, 'E
 INSERT INTO tb_rateio (valor, situacao, id_morador, id_conta) VALUES (100.00, 'EM_ABERTO', 3, 6);
 INSERT INTO tb_rateio (valor, situacao, id_morador, id_conta) VALUES (100.00, 'PAGO', 1, 6);
 INSERT INTO tb_rateio (valor, situacao, id_morador, id_conta) VALUES (100.00, 'EM_ABERTO', 2, 6);
+INSERT INTO tb_rateio (valor, situacao, id_morador, id_conta) VALUES (50.00, 'EM_ABERTO', 2, 2);
 
 INSERT INTO tb_historico (id_conta, id_morador, data, situacao) VALUES (1, 1, '2025-06-25T14:30:00', 'PENDENTE'); 
 INSERT INTO tb_historico (id_conta, id_morador, data, situacao) VALUES (2, 3, '2024-08-30T14:30:00', 'CANCELADA');

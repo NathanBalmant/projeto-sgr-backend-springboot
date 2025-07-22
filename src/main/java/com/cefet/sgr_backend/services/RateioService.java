@@ -10,6 +10,7 @@ import com.cefet.sgr_backend.entities.Conta;
 import com.cefet.sgr_backend.entities.Morador;
 import com.cefet.sgr_backend.entities.Rateio;
 import com.cefet.sgr_backend.enums.SituacaoConta;
+import com.cefet.sgr_backend.enums.SituacaoRateio;
 import com.cefet.sgr_backend.repositories.ContaRepository;
 import com.cefet.sgr_backend.repositories.MoradorRepository;
 import com.cefet.sgr_backend.repositories.RateioRepository;
@@ -117,6 +118,21 @@ public class RateioService {
     public Double calcularSaldoMorador(Long moradorId) {
     Double saldo = rateioRepository.calcularSaldoMorador(moradorId);
     return saldo != null ? saldo : 0.0;
-}
+    }
 
+    public RateioDTO quitarRateio(Long idRateio, Long idMoradorPagador) {
+    Rateio rateio = rateioRepository.findById(idRateio)
+            .orElseThrow(() -> new EntityNotFoundException("Rateio não encontrado com ID: " + idRateio));
+        if (rateio.getSituacao() == SituacaoRateio.PAGO) {
+            throw new IllegalStateException("Rateio já está pago.");
+    }
+    Conta contaAssociada = rateio.getConta();
+         if (contaAssociada.getSituacao() == SituacaoConta.QUITADA || contaAssociada.getSituacao() == SituacaoConta.CANCELADA) {
+         throw new IllegalStateException("Não é possível quitar rateio de uma conta que está finalizada (quitada ou cancelada).");
+    }
+
+    rateio.setSituacao(SituacaoRateio.PAGO);
+    Rateio salvo = rateioRepository.save(rateio);
+    return new RateioDTO(salvo);
+    }
 }
