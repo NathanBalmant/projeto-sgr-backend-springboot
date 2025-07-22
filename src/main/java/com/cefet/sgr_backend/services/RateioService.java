@@ -121,18 +121,32 @@ public class RateioService {
     }
 
     public RateioDTO quitarRateio(Long idRateio, Long idMoradorPagador) {
-    Rateio rateio = rateioRepository.findById(idRateio)
+        Rateio rateio = rateioRepository.findById(idRateio)
             .orElseThrow(() -> new EntityNotFoundException("Rateio não encontrado com ID: " + idRateio));
+    
         if (rateio.getSituacao() == SituacaoRateio.PAGO) {
             throw new IllegalStateException("Rateio já está pago.");
+        }
+    
+        Conta conta = rateio.getConta();
+        if (conta.getSituacao() == SituacaoConta.QUITADA || conta.getSituacao() == SituacaoConta.CANCELADA) {
+            throw new IllegalStateException("Não é possível quitar rateio de uma conta finalizada.");
+        }
+    
+        rateio.setSituacao(SituacaoRateio.PAGO);
+        Rateio salvo = rateioRepository.save(rateio);
+    
+        // Verifica se todos os rateios da conta estão pagos
+        List<Rateio> rateiosDaConta = rateioRepository.findByContaId(conta.getId());
+        boolean todosPagos = rateiosDaConta.stream()
+            .allMatch(r -> r.getSituacao() == SituacaoRateio.PAGO);
+    
+        if (todosPagos && conta.getSituacao() == SituacaoConta.PENDENTE) {
+            conta.setSituacao(SituacaoConta.QUITADA);
+            contaRepository.save(conta);
+        }
+    
+        return new RateioDTO(salvo);
     }
-    Conta contaAssociada = rateio.getConta();
-         if (contaAssociada.getSituacao() == SituacaoConta.QUITADA || contaAssociada.getSituacao() == SituacaoConta.CANCELADA) {
-         throw new IllegalStateException("Não é possível quitar rateio de uma conta que está finalizada (quitada ou cancelada).");
-    }
-
-    rateio.setSituacao(SituacaoRateio.PAGO);
-    Rateio salvo = rateioRepository.save(rateio);
-    return new RateioDTO(salvo);
-    }
+    
 }
